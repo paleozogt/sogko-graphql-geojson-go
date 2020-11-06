@@ -2,9 +2,10 @@ package geojson
 
 import (
 	"encoding/json"
+	"strconv"
+
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/graphql/language/ast"
-	"strconv"
 )
 
 var GeoJSONInterface *graphql.Interface
@@ -88,14 +89,14 @@ func init() {
 				Type: graphql.NewList(graphql.Float),
 			},
 		},
-		ResolveType: func(value interface{}, info graphql.ResolveInfo) *graphql.Object {
+		ResolveType: func(p graphql.ResolveTypeParams) *graphql.Object {
 			valueMap := map[string]interface{}{}
-			valueMap, ok := value.(map[string]interface{})
+			valueMap, ok := p.Value.(map[string]interface{})
 			if !ok {
 				// Fallback to force-cast it to map[string]interface{}
 				// Quite expensive to do this every time GraphQL needs to do ResolveType() check
 				// To avoid this, marshal-unmarshal your struct to map[string]interface{}
-				b, _ := json.Marshal(value)
+				b, _ := json.Marshal(p.Value)
 				json.Unmarshal(b, &valueMap)
 			}
 			ttype, _ := valueMap["type"]
@@ -139,14 +140,14 @@ func init() {
 				Type: CoordinatesScalar,
 			},
 		},
-		ResolveType: func(value interface{}, info graphql.ResolveInfo) *graphql.Object {
+		ResolveType: func(p graphql.ResolveTypeParams) *graphql.Object {
 			valueMap := map[string]interface{}{}
-			valueMap, ok := value.(map[string]interface{})
+			valueMap, ok := p.Value.(map[string]interface{})
 			if !ok {
 				// Fallback to force-cast it to map[string]interface{}
 				// Quite expensive to do this every time GraphQL needs to do ResolveType() check
 				// To avoid this, marshal-unmarshal your struct to map[string]interface{}
-				b, _ := json.Marshal(value)
+				b, _ := json.Marshal(p.Value)
 				json.Unmarshal(b, &valueMap)
 			}
 			ttype, _ := valueMap["type"]

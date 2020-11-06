@@ -45,8 +45,8 @@ var CRSPropertiesUnion = graphql.NewUnion(graphql.UnionConfig{
 		NamedCRSPropertiesObject,
 		LinkedCRSPropertiesObject,
 	},
-	ResolveType: func(value interface{}, info graphql.ResolveInfo) *graphql.Object {
-		if valueMap, ok := value.(map[string]interface{}); ok {
+	ResolveType: func(p graphql.ResolveTypeParams) *graphql.Object {
+		if valueMap, ok := p.Value.(map[string]interface{}); ok {
 			if _, hasHref := valueMap["href"]; hasHref {
 				return LinkedCRSPropertiesObject
 			}
